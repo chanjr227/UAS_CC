@@ -27,4 +27,6 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: chandra227/uas-pcc-chandra-2025:latest
+        tags: |
+          chandra227/uas-pcc-chandra-2025:latest
+          chandra227/uas-pcc-chandra-2025:${{ github.sha }}
