@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  web:
+    image: chandra227/todolist:latest
+    container_name: todolist-container
+    ports:
+      - "5000:5000"
+    restart: always
