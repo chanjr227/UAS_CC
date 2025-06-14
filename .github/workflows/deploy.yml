@@ -3,7 +3,7 @@ name: Deploy to EC2 with Docker Compose
 on:
   push:
     branches:
-      - dev  # hanya akan jalan jika push ke branch 'dev'
+      - main
 
 jobs:
   deploy:
