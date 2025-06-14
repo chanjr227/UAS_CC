@@ -1,9 +1,9 @@
-name: Deploy to EC2
+name: Deploy to EC2 with Docker Compose
 
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   deploy:
@@ -23,7 +23,7 @@ jobs:
           source: "."
           target: "~/python-project-deployment-to-vps-main"
 
-      - name: Build & Run Docker on EC2
+      - name: Run Docker Compose on EC2
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -32,7 +32,6 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd ~/python-project-deployment-to-vps-main
-            docker build -t myapp .
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d --name myapp -p 80:5000 myapp
+            docker compose pull
+            docker compose down
+            docker compose up -d
