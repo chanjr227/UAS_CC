@@ -1,37 +1,25 @@
 name: Deploy to EC2 with Docker Compose
 
 on:
-  push:
-    branches:
-      - dev
+  workflow_run:
+    workflows: ["Build and Push Docker Image"]
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
-
-      - name: Copy project files to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: "${{ secrets.EC2_HOST }}"
-          username: "ubuntu"
-          port: "${{ secrets.EC2_PORT }}"
-          key: "${{ secrets.EC2_KEY }}"
-          source: "."
-          target: "~/python-project-deployment-to-vps-main"
-
-      - name: Run Docker Compose on EC2
+      - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: "${{ secrets.EC2_HOST }}"
-          username: "ubuntu"
-          port: "${{ secrets.EC2_PORT }}"
-          key: "${{ secrets.EC2_KEY }}"
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          port: 22
           script: |
-            cd ~/python-project-deployment-to-vps-main
-            docker compose pull
+            cd ~/todolist
+            docker pull chandra227/todolist:latest
             docker compose down
             docker compose up -d
