@@ -20,6 +20,6 @@ jobs:
           port: 22
           script: |
             cd ~/todolist
-            docker pull chandra227/todolist:0.1
+            docker pull chandra227/todolist:01
             docker compose down
             docker compose up -d
