@@ -1,9 +1,27 @@
-version: "3.8"
+  deploy-to-ec2:
+    needs: build-and-push
+    runs-on: ubuntu-latest
 
-services:
-  web:
-    image: chandra227/todolist:latest
-    container_name: todolist-container
-    ports:
-      - "5000:5000"
-    restart: always
+    steps:
+    - name: Copy docker-compose.yml to EC2
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        source: "docker-compose.yml"
+        target: "~/todolist"
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        script: |
+          cd ~/todolist
+          docker compose pull
+          docker compose down
+          docker compose up -d
