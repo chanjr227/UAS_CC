@@ -1,0 +1,15 @@
+name: Test Ping EC2
+
+on:
+  workflow_dispatch:  # agar bisa dijalankan manual dari GitHub UI
+
+jobs:
+  ping-ec2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping EC2 instance
+        run: |
+          echo "Cek koneksi ke EC2"
+          ping -c 4 ${{ secrets.MY_SERVER_IP }}
+
