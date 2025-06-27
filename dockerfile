@@ -11,7 +11,7 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Buka port Flask/Gunicorn
-EXPOSE 5000
+EXPOSE 80
 
 # Jalankan app menggunakan Gunicorn (untuk production)
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "main:app"]
