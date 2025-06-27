@@ -10,6 +10,9 @@ COPY . .
 # Install dependensi Python dari requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# ✅ Tambahkan ini (debug)
+RUN ls -R /app
+
 # Buka port Flask/Gunicorn
 EXPOSE 80
 
