@@ -2,9 +2,9 @@ name: Docker Build & Push to Docker Hub
 
 on:
   push:
-    branches: main
+    branches: [main]
   pull_request:
-    branches: main
+    branches: [main]
 
 jobs:
   build-and-push:
@@ -30,10 +30,12 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          chandra227/todolist
+          chandra227/todolist:latest
+
   deploy-to-ec2:
     needs: build-and-push
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
     steps:
     - name: Deploy to EC2
